@@ -1,6 +1,7 @@
 import 'dart:async';
+import 'package:directory_mobile/core/constants/app_assets.dart';
+import 'package:directory_mobile/core/theme/app_colors.dart';
 import 'package:directory_mobile/features/auth/presentation/authentication_screen.dart';
-import 'package:directory_mobile/features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
 
 class LaunchScreen extends StatefulWidget {
@@ -26,13 +27,11 @@ class _LaunchScreenState extends State<LaunchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var assetName = "assets/images/logo/android-chrome-512x512.png";
     return Scaffold(
-      backgroundColor: Color(0xFF887481),
+      backgroundColor: AppColors.primary,
       body: Center(
-          child: Image(
-        image: AssetImage(assetName),
-      )),
+          child: Image.asset(AppAssets.logo),
+      ),
     );
   }
 }
