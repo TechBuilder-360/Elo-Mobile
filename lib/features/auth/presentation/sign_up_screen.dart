@@ -1,18 +1,19 @@
-import 'package:directory_mobile/core/constants/app_assets.dart';
-import 'package:directory_mobile/core/theme/app_colors.dart';
-import 'package:directory_mobile/features/auth/presentation/otp_screen.dart';
-import 'package:directory_mobile/shared/widgets/buttons.dart';
-import 'package:directory_mobile/shared/widgets/textbox/email.textbox.dart';
 import 'package:flutter/material.dart';
 
-class LoginScreen extends StatefulWidget {
-  const LoginScreen({super.key});
+import '../../../core/constants/app_assets.dart';
+import '../../../core/theme/app_colors.dart';
+import '../../../shared/widgets/buttons.dart';
+import '../../../shared/widgets/textbox/email.textbox.dart';
+import 'otp_screen.dart';
+
+class SignUpScreen extends StatefulWidget {
+  const SignUpScreen({super.key});
 
   @override
-  State<LoginScreen> createState() => _LoginScreenState();
+  State<SignUpScreen> createState() => _SignUpScreenState();
 }
 
-class _LoginScreenState extends State<LoginScreen> {
+class _SignUpScreenState extends State<SignUpScreen> {
   @override
   Widget build(BuildContext context) {
     final TextEditingController emailController = TextEditingController();
@@ -20,7 +21,7 @@ class _LoginScreenState extends State<LoginScreen> {
     double screenHeight = MediaQuery.of(context).size.height;
     double screenWidth = MediaQuery.of(context).size.width;
 
-    void login() {
+    void signup() {
       // Todo: Make call to API to request OTP
       // Switch to OTP Screen
       String email = emailController.value.text;
@@ -49,7 +50,7 @@ class _LoginScreenState extends State<LoginScreen> {
                 padding: const EdgeInsets.all(20),
                 child: emailTextBox(emailController),
               ),
-              elevatedButton(login, "LOGIN"),
+              elevatedButton(signup, "SIGN UP"),
             ],
           ),
         ],
