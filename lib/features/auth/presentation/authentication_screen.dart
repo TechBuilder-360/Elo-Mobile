@@ -1,6 +1,6 @@
 import 'package:directory_mobile/features/auth/presentation/login_screen.dart';
 import 'package:directory_mobile/features/auth/presentation/sign_up_screen.dart';
-// import 'package:directory_mobile/shared/widgets/buttons.dart';
+// import 'package:directory_mobile/shared/widgets/elevated_button.dart';
 import 'package:flutter/material.dart';
 
 import '../../../core/constants/app_assets.dart';
