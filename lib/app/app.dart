@@ -19,7 +19,7 @@ class App extends StatelessWidget {
             seedColor: const Color.fromARGB(255, 159, 151, 173)),
         useMaterial3: true,
       ),
-      home: seenOnboarding ? LaunchScreen() : const OnboardingScreen(),
+      home: SafeArea(child: seenOnboarding ? LaunchScreen() : const OnboardingScreen()),
     );
   }
 }
