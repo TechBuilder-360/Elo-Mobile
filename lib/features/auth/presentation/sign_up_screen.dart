@@ -1,9 +1,7 @@
 import 'package:directory_mobile/shared/widgets/authentication_button.dart';
 import 'package:flutter/material.dart';
-
 import '../../../core/constants/app_assets.dart';
 import '../../../core/theme/app_colors.dart';
-import '../../../shared/widgets/elevated_button.dart';
 import '../../../shared/widgets/textbox.dart';
 import 'otp_screen.dart';
 
@@ -15,42 +13,60 @@ class SignUpScreen extends StatefulWidget {
 }
 
 class _SignUpScreenState extends State<SignUpScreen> {
+  final formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+  final TextEditingController displayNameController = TextEditingController();
+
+  bool _isFormValid = false;
+
+  @override
+  void initState() {
+    super.initState();
+    emailController.addListener(_checkFormValidity);
+    displayNameController.addListener(_checkFormValidity);
+  }
+
+  void _checkFormValidity() {
+    setState(() {
+      _isFormValid = emailController.text.trim().isNotEmpty &&
+          displayNameController.text.trim().isNotEmpty &&
+          emailController.text.contains('@') &&
+          emailController.text.contains('.');
+    });
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    displayNameController.dispose();
+    super.dispose();
+  }
+
+  void signup() {
+    // Get all values here
+    String email = emailController.text;
+    String displayName = displayNameController.text;
+
+    if (formKey.currentState!.validate()) {
+      print('Email: $email');
+      print('Display Name: $displayName');
+
+      // Do your sign-up logic (API call, etc.)
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Failed to sign up.')),
+      );
+      return;
+    }
+
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OtpScreen(email: email)),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    final formKey = GlobalKey<FormState>();
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController displayNameController = TextEditingController();
-
-    @override
-    void dispose() {
-      emailController.dispose();
-      displayNameController.dispose();
-      super.dispose();
-    }
-
     double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
-
-    void signup() {
-      if (formKey.currentState!.validate()) {
-        // Get all values here
-        String email = emailController.text;
-        String displayName = displayNameController.text;
-
-        print('Email: $email');
-        print('Display Name: $displayName');
-
-        // Do your sign-up logic (API call, etc.)
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Signing up...')),
-        );
-
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => OtpScreen(email: email)),
-        );
-      }
-    }
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -69,9 +85,10 @@ class _SignUpScreenState extends State<SignUpScreen> {
             child: Form(
                 key: formKey,
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 15.0, vertical: 10.0),
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
+                  padding: const EdgeInsets.symmetric(
+                      horizontal: 15.0, vertical: 10.0),
+                  child: Column(
+                    mainAxisSize: MainAxisSize.min,
                     verticalDirection: VerticalDirection.down,
                     children: [
                       CustomTextField(
@@ -86,7 +103,8 @@ class _SignUpScreenState extends State<SignUpScreen> {
                           hint: 'display name',
                           isEmail: false),
                       Spacer(),
-                      CustomAuthenticationButton(onPressed: signup, text: "Submit"),
+                      CustomAuthenticationButton(
+                          onPressed: signup, text: "Submit"),
                     ],
                   ),
                 )),

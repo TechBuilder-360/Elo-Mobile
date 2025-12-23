@@ -2,7 +2,6 @@ import 'package:directory_mobile/core/constants/app_assets.dart';
 import 'package:directory_mobile/core/theme/app_colors.dart';
 import 'package:directory_mobile/features/auth/presentation/otp_screen.dart';
 import 'package:directory_mobile/shared/widgets/authentication_button.dart';
-import 'package:directory_mobile/shared/widgets/elevated_button.dart';
 import 'package:directory_mobile/shared/widgets/textbox.dart';
 import 'package:flutter/material.dart';
 
@@ -14,35 +13,52 @@ class LoginScreen extends StatefulWidget {
 }
 
 class _LoginScreenState extends State<LoginScreen> {
+  final _formKey = GlobalKey<FormState>();
+  final TextEditingController emailController = TextEditingController();
+
+  bool _isFormValid = false;
+
   @override
-  Widget build(BuildContext context) {
-    final TextEditingController emailController = TextEditingController();
-    final TextEditingController displayNameController = TextEditingController();
+  void initState() {
+    super.initState();
+    // Listen to all fields
+    emailController.addListener(_checkFormValidity);
+  }
 
-    @override
-    void dispose() {
-      emailController.dispose();
-      displayNameController.dispose();
-      super.dispose();
-    }
+  void _checkFormValidity() {
+    setState(() {
+      _isFormValid = emailController.text.trim().isNotEmpty &&
+          emailController.text.contains('@') &&
+          emailController.text.contains('.');
+    });
+  }
 
-    double screenHeight = MediaQuery.of(context).size.height;
-    double screenWidth = MediaQuery.of(context).size.width;
+  @override
+  void dispose() {
+    emailController.dispose();
+    super.dispose();
+  }
 
-    void login() {
-      // Todo: Make call to API to request OTP
-
+  void login() {
+    if (!_isFormValid) {
       ScaffoldMessenger.of(context).showSnackBar(
         const SnackBar(content: Text('Login...')),
       );
-
-      // Switch to OTP Screen
-      String email = emailController.text;
-      Navigator.push(
-        context,
-        MaterialPageRoute(builder: (context) => OtpScreen(email: email)),
-      );
+      return;
     }
+    // Todo: Make call to API to request OTP
+    // Switch to OTP Screen
+    String email = emailController.text;
+    Navigator.push(
+      context,
+      MaterialPageRoute(builder: (context) => OtpScreen(email: email)),
+    );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    double screenHeight = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
 
     return Scaffold(
       backgroundColor: AppColors.background,
@@ -56,19 +72,27 @@ class _LoginScreenState extends State<LoginScreen> {
               child: Image.asset(AppAssets.loginIllustration),
             ),
           ),
-          Expanded(
-            child: Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-                  child:  CustomTextField(controller: emailController, label: "Email Address", hint: 'abc@example.com', isEmail: true),
+           Expanded(
+              child: Form(
+                key: _formKey,
+                child: Column(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 20.0, vertical: 10.0),
+                      child: CustomTextField(
+                          controller: emailController,
+                          label: "Email Address",
+                          hint: 'abc@example.com',
+                          isEmail: true),
+                    ),
+                    Spacer(),
+                    CustomAuthenticationButton(onPressed: login, text: "Confirm"),
+                  ],
                 ),
-                Spacer(),
-                CustomAuthenticationButton(onPressed: login, text: "Confirm"),
-              ],
+              ),
             ),
-          ),
         ],
       ),
     );

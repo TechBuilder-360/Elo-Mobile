@@ -2,7 +2,6 @@ import 'package:directory_mobile/features/auth/presentation/authentication_scree
 import 'package:directory_mobile/features/auth/presentation/login_screen.dart';
 import 'package:directory_mobile/features/auth/presentation/otp_screen.dart';
 import 'package:directory_mobile/features/auth/presentation/sign_up_screen.dart';
-import 'package:directory_mobile/features/launch/presentation/launch_screen.dart';
 import 'package:directory_mobile/features/onboarding/presentation/onboarding_screen.dart';
 import '../features/home/presentation/home_screen.dart';
 import 'package:flutter/material.dart';
@@ -23,9 +22,9 @@ class AppRoutes {
     auth: (context) => Authentication(),
     login: (context) => LoginScreen(),
     signup: (context) => SignUpScreen(),
-    otp: (context) => OtpScreen(email: '',),
+    otp: (context) => OtpScreen(
+          email: '',
+        ),
     home: (context) => HomeScreen(),
   };
-
-
 }
